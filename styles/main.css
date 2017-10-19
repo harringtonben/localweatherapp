@@ -1,2 +1,9 @@
 body {
-  background-color: goldenrod; }
+  background-color: #F9F8FF; }
+
+#weatherapp img {
+  display: block;
+  margin: 0 auto;
+  webkit-box-shadow: 0px 4px 31px 9px rgba(141, 141, 185, 0.55);
+  moz-box-shadow: 0px 4px 31px 9px rgba(141, 141, 185, 0.55);
+  box-shadow: 0px 4px 31px 9px rgba(141, 141, 185, 0.55); }
