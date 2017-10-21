@@ -1,5 +1,8 @@
 "use strict";
 
+const weather = require("./weatherapp");
+
+
 const apiKeys = () => {
     return new Promise((resolve, reject) => {
         $.ajax("./db/apikeys.json").done((data) => {
@@ -12,7 +15,7 @@ const apiKeys = () => {
 
 const retrieveKeys = () => {
     apiKeys().then((results) => {
-        console.log(results.apiKeys.weatherapp.apiKey);
+        weather.setApiKey(results.apiKeys.weatherapp.apiKey);
     }).catch((error) => {
         console.log("error in retrieve keys", error);
     });
