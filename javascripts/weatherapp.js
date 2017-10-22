@@ -1,5 +1,7 @@
 "use strict";
 
+const dom = require("./dom");
+
 let weatherKey;
 
 const weatherAPISearch = (query) => {
@@ -24,7 +26,7 @@ const forecastAPISearch = (query) => {
 
 const searchWeather = (query) => {
     weatherAPISearch(query).then((results) => {
-        console.log(results);
+        dom.domStrang(results);
     }).catch((error) => {
         console.log("There was an error", error);
     }); 

@@ -12,6 +12,8 @@ $("#weathersubmit").click(() => {
     let query = $("#weatherzip").val();
     weather.searchWeather(query);
     $("#weatherzip").val("");
+    $("#weathersubmit").addClass("disabled");
+    $("#changeweather").removeClass("hidden");
 });
 
 $("#weatherzip").keypress((e) => {
@@ -19,6 +21,7 @@ $("#weatherzip").keypress((e) => {
         let query = $("#weatherzip").val();
         weather.searchWeather(query);
         $("#weatherzip").val("");
+        $("#changeweather").removeClass("hidden");
     }
 });
 
