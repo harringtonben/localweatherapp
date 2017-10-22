@@ -23,7 +23,38 @@ const retrieveKeys = () => {
 };
 
 module.exports = {retrieveKeys};
-},{"./weatherapp":4}],2:[function(require,module,exports){
+},{"./weatherapp":5}],2:[function(require,module,exports){
+"use strict";
+
+const domStrang = (currentWeather) => {
+    let printStrang = ``;
+    printStrang += `<div class="current-weather>"
+                    <div class="row">
+                    <div class="col-sm-6 col-md-4 col-md-offset-4">
+                    <div class="weather-city">
+                        <h1>${currentWeather.name}</h1>
+                    </div>
+                      <div class="thumbnail">
+                        <img src="http://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png" alt="">
+                        <div class="caption">
+                          <h3>Current Temp: ${Math.round(currentWeather.main.temp)}</h3>
+                          <p>Conditions: ${currentWeather.weather[0].description}</p>
+                          <p>Wind Speed: ${currentWeather.wind.speed}</p>
+                          <p>Wind Speed: ${currentWeather.main.pressure}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>`;
+    printDom(printStrang);
+};
+
+const printDom = (strang) => {
+    $("#weatherOutput").html(strang);
+};
+
+module.exports = {domStrang};
+},{}],3:[function(require,module,exports){
 "use strict";
 
 const weather = require("./weatherapp");
@@ -38,6 +69,8 @@ $("#weathersubmit").click(() => {
     let query = $("#weatherzip").val();
     weather.searchWeather(query);
     $("#weatherzip").val("");
+    $("#weathersubmit").addClass("disabled");
+    $("#changeweather").removeClass("hidden");
 });
 
 $("#weatherzip").keypress((e) => {
@@ -45,11 +78,12 @@ $("#weatherzip").keypress((e) => {
         let query = $("#weatherzip").val();
         weather.searchWeather(query);
         $("#weatherzip").val("");
+        $("#changeweather").removeClass("hidden");
     }
 });
 
 module.exports = {};
-},{"./weatherapp":4}],3:[function(require,module,exports){
+},{"./weatherapp":5}],4:[function(require,module,exports){
 "use strict";
 
 const apikeys = require("./apikeys");
@@ -60,8 +94,10 @@ apikeys.retrieveKeys();
 
 
 console.log("I'm in main JS dawg");
-},{"./apikeys":1,"./events":2,"./weatherapp":4}],4:[function(require,module,exports){
+},{"./apikeys":1,"./events":3,"./weatherapp":5}],5:[function(require,module,exports){
 "use strict";
+
+const dom = require("./dom");
 
 let weatherKey;
 
@@ -87,7 +123,7 @@ const forecastAPISearch = (query) => {
 
 const searchWeather = (query) => {
     weatherAPISearch(query).then((results) => {
-        console.log(results);
+        dom.domStrang(results);
     }).catch((error) => {
         console.log("There was an error", error);
     }); 
@@ -106,4 +142,4 @@ const setApiKey = (apiKey) => {
 };
 
 module.exports = {searchWeather, searchForecast, setApiKey};
-},{}]},{},[3]);
+},{"./dom":2}]},{},[4]);
