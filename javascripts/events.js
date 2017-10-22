@@ -1,6 +1,7 @@
 "use strict";
 
 const weather = require("./weatherapp");
+let query;
 
 $("#weatherzip").keyup(() => {
     if ($("#weatherzip").val().length === 5) {
@@ -9,7 +10,7 @@ $("#weatherzip").keyup(() => {
 });
 
 $("#weathersubmit").click(() => {
-    let query = $("#weatherzip").val();
+    query = $("#weatherzip").val();
     weather.searchWeather(query);
     $("#weatherzip").val("");
     $("#weathersubmit").addClass("disabled");
@@ -18,11 +19,23 @@ $("#weathersubmit").click(() => {
 
 $("#weatherzip").keypress((e) => {
     if ($("#weatherzip").val().length === 5 && e.key === "Enter") {
-        let query = $("#weatherzip").val();
+        query = $("#weatherzip").val();
         weather.searchWeather(query);
-        $("#weatherzip").val("");
+        $("#changeweather").removeClass("hidden");
         $("#changeweather").removeClass("hidden");
     }
+});
+
+$("#3dayweather").click(() => {
+    weather.searchForecast(query);
+});
+
+$("#7dayweather").click(() => {
+    weather.searchForecast7Day(query);
+});
+
+$("#currentweather").click(() => {
+    weather.searchWeather(query);
 });
 
 module.exports = {};
