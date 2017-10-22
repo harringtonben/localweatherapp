@@ -17,25 +17,50 @@ const apiKeys = () => {
 const retrieveKeys = () => {
     apiKeys().then((results) => {
         weather.setApiKey(results.apiKeys.weatherapp.apiKey);
-        weather.searchWeather(37211);
-        weather.searchForecast(37211);
     }).catch((error) => {
         console.log("error in retrieve keys", error);
     });
 };
 
 module.exports = {retrieveKeys};
-},{"./weatherapp":3}],2:[function(require,module,exports){
+},{"./weatherapp":4}],2:[function(require,module,exports){
+"use strict";
+
+const weather = require("./weatherapp");
+
+$("#weatherzip").keyup(() => {
+    if ($("#weatherzip").val().length === 5) {
+        $("#weathersubmit").removeClass("disabled");
+    }
+});
+
+$("#weathersubmit").click(() => {
+    let query = $("#weatherzip").val();
+    weather.searchWeather(query);
+    $("#weatherzip").val("");
+});
+
+$("#weatherzip").keypress((e) => {
+    if ($("#weatherzip").val().length === 5 && e.key === "Enter") {
+        let query = $("#weatherzip").val();
+        weather.searchWeather(query);
+        $("#weatherzip").val("");
+    }
+});
+
+module.exports = {};
+},{"./weatherapp":4}],3:[function(require,module,exports){
 "use strict";
 
 const apikeys = require("./apikeys");
 const weather = require("./weatherapp");
+require("./events");
 
 apikeys.retrieveKeys();
 
 
 console.log("I'm in main JS dawg");
-},{"./apikeys":1,"./weatherapp":3}],3:[function(require,module,exports){
+},{"./apikeys":1,"./events":2,"./weatherapp":4}],4:[function(require,module,exports){
 "use strict";
 
 let weatherKey;
@@ -81,4 +106,4 @@ const setApiKey = (apiKey) => {
 };
 
 module.exports = {searchWeather, searchForecast, setApiKey};
-},{}]},{},[2]);
+},{}]},{},[3]);
