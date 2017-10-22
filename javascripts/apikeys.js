@@ -16,8 +16,6 @@ const apiKeys = () => {
 const retrieveKeys = () => {
     apiKeys().then((results) => {
         weather.setApiKey(results.apiKeys.weatherapp.apiKey);
-        weather.searchWeather(37211);
-        weather.searchForecast(37211);
     }).catch((error) => {
         console.log("error in retrieve keys", error);
     });
