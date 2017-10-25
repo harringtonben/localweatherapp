@@ -2,12 +2,12 @@
 "use strict";
 
 const weather = require("./weatherapp");
-
+const firebaseApi = require("./firebaseApi");
 
 const apiKeys = () => {
     return new Promise((resolve, reject) => {
         $.ajax("./db/apikeys.json").done((data) => {
-            resolve(data);
+            resolve(data.apiKeys);
         }).fail((error) => {
             reject(error);
         });
@@ -16,14 +16,16 @@ const apiKeys = () => {
 
 const retrieveKeys = () => {
     apiKeys().then((results) => {
-        weather.setApiKey(results.apiKeys.weatherapp.apiKey);
+        weather.setApiKey(results.weatherapp.apiKey);
+        firebaseApi.setKey(results.firebaseKeys);
+        firebase.initializeApp(results.firebaseKeys);
     }).catch((error) => {
         console.log("error in retrieve keys", error);
     });
 };
 
 module.exports = {retrieveKeys};
-},{"./weatherapp":5}],2:[function(require,module,exports){
+},{"./firebaseApi":4,"./weatherapp":6}],2:[function(require,module,exports){
 "use strict";
 
 const tm = (unix_tm) => {
@@ -37,24 +39,27 @@ const domStrang = (currentWeather) => {
                         <h1>${currentWeather.name}</h1>
                     </div>
                     <table class="table current-weather">
-                      <tr>
+                      <tr class="forecast">
                         <td>
-                          <img src="http://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png" alt="">
+                          <img class="weatherpic" src="http://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png" alt="">
                         <td>
                         <td>
-                          <p>${tm(currentWeather.dt)}</p>
+                          <p class="timestamp">${tm(currentWeather.dt)}</p>
                         </td>
                         <td>
-                          <p>Current Temp: ${Math.round(currentWeather.main.temp)}</p>
+                          <p class="temp-high">Current Temp: ${Math.round(currentWeather.main.temp)}</p>
                         </td>
                         <td>
-                          <p>Conditions: ${currentWeather.weather[0].description}</p>
+                          <p class="conditions">Conditions: ${currentWeather.weather[0].description}</p>
                         </td>
                         <td>
-                          <p>Wind Speed: ${currentWeather.wind.speed}</p> 
+                          <p class="windspeed">Wind Speed: ${currentWeather.wind.speed}</p> 
                         </td>
                         <td>
-                          <p>Air Pressue: ${currentWeather.main.pressure}</p>
+                          <p class="airpressure">Air Pressue: ${currentWeather.main.pressure}</p>
+                        </td>
+                        <td>
+                          <button class=" btn btn-primary glyphicon glyphicon-save save"></button>
                         </td>
                       </tr>
                     </table>`;
@@ -69,27 +74,30 @@ const threeDayWeather = (currentWeather) => {
                   <table class="table current-weather">`;
   let forecastArray = currentWeather.list;
   for (let i = 0; i < 3; i++) {
-    printStrang += `<tr>
+    printStrang += `<tr class="forecast">
                       <td>
-                        <img src="http://openweathermap.org/img/w/${forecastArray[i].weather[0].icon}.png" alt="">
+                        <img class="weatherpic" src="http://openweathermap.org/img/w/${forecastArray[i].weather[0].icon}.png" alt="">
                       </td>
                       <td>
-                        <p>${tm(forecastArray[i].dt)}</p>
+                        <p class="timestamp">${tm(forecastArray[i].dt)}</p>
                       </td>
                       <td>
-                        <p>High Temp: ${Math.round(forecastArray[i].temp.max)}</p>
+                        <p class="temp-high">High Temp: ${Math.round(forecastArray[i].temp.max)}</p>
                       </td>
                       <td>
-                        <p>Low Temp: ${Math.round(forecastArray[i].temp.min)}</p>
+                        <p class="temp-low">Low Temp: ${Math.round(forecastArray[i].temp.min)}</p>
                       </td>
                       <td>
-                        <p>Conditions: ${forecastArray[i].weather[0].description}</p>
+                        <p class="conditions">Conditions: ${forecastArray[i].weather[0].description}</p>
                       </td>
                       <td>
-                        <p>Wind Speed: ${forecastArray[i].speed}</p>
+                        <p class="windspeed">Wind Speed: ${forecastArray[i].speed}</p>
                       </td>
                       <td>
-                        <p>Air Pressure: ${forecastArray[i].pressure}</p>
+                        <p class="airpressure">Air Pressure: ${forecastArray[i].pressure}</p>
+                      </td>
+                      <td>
+                        <button class=" btn btn-primary glyphicon glyphicon-save save"></button>
                       </td>
                     </tr>`;
   }
@@ -105,27 +113,30 @@ const sevenDayWeather = (currentWeather) => {
                     <table class="table current-weather">`;
   let forecastArray = currentWeather.list;
   for (let i = 0; i < forecastArray.length; i++) {
-    printStrang += `<tr>
+    printStrang += `<tr class="forecast">
                       <td>
-                        <img src="http://openweathermap.org/img/w/${forecastArray[i].weather[0].icon}.png" alt="">
+                        <img class="weatherpic" src="http://openweathermap.org/img/w/${forecastArray[i].weather[0].icon}.png" alt="">
                       </td>
                       <td>
-                        <p>${tm(forecastArray[i].dt)}</p>
+                        <p class="timestamp" >${tm(forecastArray[i].dt)}</p>
                       </td>
                       <td>
-                        <p>High Temp: ${Math.round(forecastArray[i].temp.max)}</p>
+                        <p class="high-temp">High Temp: ${Math.round(forecastArray[i].temp.max)}</p>
                       </td>
                       <td>
-                        <p>Low Temp: ${Math.round(forecastArray[i].temp.min)}</p>
+                        <p class="low-temp">Low Temp: ${Math.round(forecastArray[i].temp.min)}</p>
                       </td>
                       <td>
-                        <p>Conditions: ${forecastArray[i].weather[0].description}</p>
+                        <p class="conditions">Conditions: ${forecastArray[i].weather[0].description}</p>
                       </td>
                       <td>
-                        <p>Wind Speed: ${forecastArray[i].speed}</p>
+                        <p class="windspeed">Wind Speed: ${forecastArray[i].speed}</p>
                       </td>
                       <td>
-                        <p>Air Pressure: ${forecastArray[i].pressure}</p>
+                        <p class="airpressure">Air Pressure: ${forecastArray[i].pressure}</p>
+                      </td>
+                      <td>
+                        <button class=" btn btn-primary glyphicon glyphicon-save save"></button>
                       </td>
                     </tr>`;
   }
@@ -142,56 +153,140 @@ module.exports = {domStrang, threeDayWeather, sevenDayWeather};
 "use strict";
 
 const weather = require("./weatherapp");
+const firebaseApi = require("./firebaseApi");
 let query;
 
-$("#weatherzip").keyup(() => {
-    if ($("#weatherzip").val().length === 5) {
-        $("#weathersubmit").removeClass("disabled");
-    }
-});
+const zipValidator = () => {
+    $("#weatherzip").keyup(() => {
+        if ($("#weatherzip").val().length === 5) {
+            $("#weathersubmit").removeClass("disabled");
+        }
+    });
+};
 
-$("#weathersubmit").click(() => {
-    query = $("#weatherzip").val();
-    weather.searchWeather(query);
-    $("#weatherzip").val("");
-    $("#weathersubmit").addClass("disabled");
-    $("#changeweather").removeClass("hidden");
-});
-
-$("#weatherzip").keypress((e) => {
-    if ($("#weatherzip").val().length === 5 && e.key === "Enter") {
+const weatherClick = () => {
+    $("#weathersubmit").click(() => {
         query = $("#weatherzip").val();
         weather.searchWeather(query);
+        $("#weatherzip").val("");
+        $("#weathersubmit").addClass("disabled");
         $("#changeweather").removeClass("hidden");
-        $("#changeweather").removeClass("hidden");
-    }
-});
+    });
+};
 
-$("#3dayweather").click(() => {
-    weather.searchForecast(query);
-});
+const weatherEnter = () => {
+    $("#weatherzip").keypress((e) => {
+        if ($("#weatherzip").val().length === 5 && e.key === "Enter") {
+            query = $("#weatherzip").val();
+            weather.searchWeather(query);
+            $("#changeweather").removeClass("hidden");
+            $("#changeweather").removeClass("hidden");
+        }
+    });
+};
 
-$("#7dayweather").click(() => {
-    weather.searchForecast7Day(query);
-});
+const forecast3Day = () => {
+    $("#3dayweather").click(() => {
+        weather.searchForecast(query);
+    });
+};
 
-$("#currentweather").click(() => {
-    weather.searchWeather(query);
-});
+const forecast7Day = () => {
+    $("#7dayweather").click(() => {
+        weather.searchForecast7Day(query);
+    });
+};
 
-module.exports = {};
-},{"./weatherapp":5}],4:[function(require,module,exports){
+const weatherCurrent = () => {
+    $("#currentweather").click(() => {
+        weather.searchWeather(query);
+    });
+};
+
+
+const googleAuth = () => {
+    $("#googleauth").click((e) => {
+        console.log("I'm hitting the google button");
+        firebaseApi.authenticateGoogle().then((result) => {
+            console.log("result", result);
+            $("#navbar").removeClass("hide");
+            $("#signin").addClass("hide");
+        }).catch((error) => {
+            console.log("error in authenticate google", error);
+        });
+    });
+};
+
+const saveForecast = () => {
+    $("body").on("click", ".save", (e) => {
+        let parent = e.target.closest(".forecast");
+
+        let savedForecast = {
+            "image_path": $(parent).find(".weatherpic").attr("src"),
+            "high_temp": $(parent).find(".high-temp").html().split(": ").pop(),
+            "low_temp": $(parent).find(".low-temp").html().split(": ").pop(),
+            "conditions": $(parent).find(".conditions").html().split(": ").pop(),
+            "windspeed": $(parent).find(".airpressure").html().split(": ").pop()
+        };
+
+        firebaseApi.saveForecast(savedForecast).then((results) => {
+            console.log(results);
+        }).catch((error) => {
+            console.log(error);
+        });
+        console.log(savedForecast);
+    });
+};
+
+const init = () => {
+    zipValidator();
+    weatherClick();
+    weatherEnter();
+    forecast3Day();
+    forecast7Day();
+    weatherCurrent();
+    googleAuth();
+    saveForecast();
+};
+
+module.exports = {init};
+},{"./firebaseApi":4,"./weatherapp":6}],4:[function(require,module,exports){
+"use strict";
+
+let firebaseKey = "";
+let userUid = "";
+
+const setKey = (key) => {
+    firebaseKey = key;
+};
+
+let authenticateGoogle = () => {
+    return new Promise((resolve, reject) => {
+      var provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider)
+        .then((authData) => {
+            userUid = authData.user.uid;
+            resolve(authData.user);
+        }).catch((error) => {
+            reject(error);
+        });
+    });
+  };
+
+  module.exports = {setKey, authenticateGoogle};
+},{}],5:[function(require,module,exports){
 "use strict";
 
 const apikeys = require("./apikeys");
 const weather = require("./weatherapp");
-require("./events");
+const events = require("./events");
 
 apikeys.retrieveKeys();
+events.init();
 
 
 console.log("I'm in main JS dawg");
-},{"./apikeys":1,"./events":3,"./weatherapp":5}],5:[function(require,module,exports){
+},{"./apikeys":1,"./events":3,"./weatherapp":6}],6:[function(require,module,exports){
 "use strict";
 
 const dom = require("./dom");
@@ -247,4 +342,4 @@ const setApiKey = (apiKey) => {
 };
 
 module.exports = {searchWeather, searchForecast,searchForecast7Day, setApiKey};
-},{"./dom":2}]},{},[4]);
+},{"./dom":2}]},{},[5]);

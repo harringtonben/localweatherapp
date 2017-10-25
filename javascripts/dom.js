@@ -11,24 +11,27 @@ const domStrang = (currentWeather) => {
                         <h1>${currentWeather.name}</h1>
                     </div>
                     <table class="table current-weather">
-                      <tr>
+                      <tr class="forecast">
                         <td>
-                          <img src="http://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png" alt="">
+                          <img class="weatherpic" src="http://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png" alt="">
                         <td>
                         <td>
-                          <p>${tm(currentWeather.dt)}</p>
+                          <p class="timestamp">${tm(currentWeather.dt)}</p>
                         </td>
                         <td>
-                          <p>Current Temp: ${Math.round(currentWeather.main.temp)}</p>
+                          <p class="temp-high">Current Temp: ${Math.round(currentWeather.main.temp)}</p>
                         </td>
                         <td>
-                          <p>Conditions: ${currentWeather.weather[0].description}</p>
+                          <p class="conditions">Conditions: ${currentWeather.weather[0].description}</p>
                         </td>
                         <td>
-                          <p>Wind Speed: ${currentWeather.wind.speed}</p> 
+                          <p class="windspeed">Wind Speed: ${currentWeather.wind.speed}</p> 
                         </td>
                         <td>
-                          <p>Air Pressue: ${currentWeather.main.pressure}</p>
+                          <p class="airpressure">Air Pressue: ${currentWeather.main.pressure}</p>
+                        </td>
+                        <td>
+                          <button class=" btn btn-primary glyphicon glyphicon-save save"></button>
                         </td>
                       </tr>
                     </table>`;
@@ -43,27 +46,30 @@ const threeDayWeather = (currentWeather) => {
                   <table class="table current-weather">`;
   let forecastArray = currentWeather.list;
   for (let i = 0; i < 3; i++) {
-    printStrang += `<tr>
+    printStrang += `<tr class="forecast">
                       <td>
-                        <img src="http://openweathermap.org/img/w/${forecastArray[i].weather[0].icon}.png" alt="">
+                        <img class="weatherpic" src="http://openweathermap.org/img/w/${forecastArray[i].weather[0].icon}.png" alt="">
                       </td>
                       <td>
-                        <p>${tm(forecastArray[i].dt)}</p>
+                        <p class="timestamp">${tm(forecastArray[i].dt)}</p>
                       </td>
                       <td>
-                        <p>High Temp: ${Math.round(forecastArray[i].temp.max)}</p>
+                        <p class="temp-high">High Temp: ${Math.round(forecastArray[i].temp.max)}</p>
                       </td>
                       <td>
-                        <p>Low Temp: ${Math.round(forecastArray[i].temp.min)}</p>
+                        <p class="temp-low">Low Temp: ${Math.round(forecastArray[i].temp.min)}</p>
                       </td>
                       <td>
-                        <p>Conditions: ${forecastArray[i].weather[0].description}</p>
+                        <p class="conditions">Conditions: ${forecastArray[i].weather[0].description}</p>
                       </td>
                       <td>
-                        <p>Wind Speed: ${forecastArray[i].speed}</p>
+                        <p class="windspeed">Wind Speed: ${forecastArray[i].speed}</p>
                       </td>
                       <td>
-                        <p>Air Pressure: ${forecastArray[i].pressure}</p>
+                        <p class="airpressure">Air Pressure: ${forecastArray[i].pressure}</p>
+                      </td>
+                      <td>
+                        <button class=" btn btn-primary glyphicon glyphicon-save save"></button>
                       </td>
                     </tr>`;
   }
@@ -79,27 +85,30 @@ const sevenDayWeather = (currentWeather) => {
                     <table class="table current-weather">`;
   let forecastArray = currentWeather.list;
   for (let i = 0; i < forecastArray.length; i++) {
-    printStrang += `<tr>
+    printStrang += `<tr class="forecast">
                       <td>
-                        <img src="http://openweathermap.org/img/w/${forecastArray[i].weather[0].icon}.png" alt="">
+                        <img class="weatherpic" src="http://openweathermap.org/img/w/${forecastArray[i].weather[0].icon}.png" alt="">
                       </td>
                       <td>
-                        <p>${tm(forecastArray[i].dt)}</p>
+                        <p class="timestamp" >${tm(forecastArray[i].dt)}</p>
                       </td>
                       <td>
-                        <p>High Temp: ${Math.round(forecastArray[i].temp.max)}</p>
+                        <p class="high-temp">High Temp: ${Math.round(forecastArray[i].temp.max)}</p>
                       </td>
                       <td>
-                        <p>Low Temp: ${Math.round(forecastArray[i].temp.min)}</p>
+                        <p class="low-temp">Low Temp: ${Math.round(forecastArray[i].temp.min)}</p>
                       </td>
                       <td>
-                        <p>Conditions: ${forecastArray[i].weather[0].description}</p>
+                        <p class="conditions">Conditions: ${forecastArray[i].weather[0].description}</p>
                       </td>
                       <td>
-                        <p>Wind Speed: ${forecastArray[i].speed}</p>
+                        <p class="windspeed">Wind Speed: ${forecastArray[i].speed}</p>
                       </td>
                       <td>
-                        <p>Air Pressure: ${forecastArray[i].pressure}</p>
+                        <p class="airpressure">Air Pressure: ${forecastArray[i].pressure}</p>
+                      </td>
+                      <td>
+                        <button class=" btn btn-primary glyphicon glyphicon-save save"></button>
                       </td>
                     </tr>`;
   }
