@@ -2,6 +2,14 @@
 	"apiKeys": {
 		"weatherapp": {
 			"apiKey": ""
-		}
+		},
+		"firebase": {
+			"apiKey": "",
+			"authDomain": "",
+			"databaseURL": "",
+			"projectId": "",
+			"storageBucket": "",
+			"messagingSenderId": ""
+		  }
 	}
 }

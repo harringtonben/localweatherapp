@@ -1,0 +1,28 @@
+{
+    "forecasts": {
+        "forecast0": {
+			"image_path": "test1",
+            "high_temp": "test1",
+            "low_temp": "test1",
+            "conditions": "test1",
+            "windspeed": "test1",
+            "uid": ""
+        },
+        "forecast1": {
+			"image_path": "test2",
+            "high_temp": "test2",
+            "low_temp": "test2",
+            "conditions": "test2",
+            "windspeed": "test2",
+            "uid": ""
+        },
+        "forecast2": {
+			"image_path": "test3",
+            "high_temp": "test3",
+            "low_temp": "test3",
+            "conditions": "test3",
+            "windspeed": "test3",
+            "uid": ""
+        }
+    }
+}
