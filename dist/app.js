@@ -47,8 +47,11 @@ const domStrang = (currentWeather) => {
                           <p class="timestamp">${tm(currentWeather.dt)}</p>
                         </td>
                         <td>
-                          <p class="temp-high">Current Temp: ${Math.round(currentWeather.main.temp)}</p>
+                          <p class="high-temp">Current Temp: ${Math.round(currentWeather.main.temp)}</p>
                         </td>
+                        <td>
+                          <p class="low-temp hide">: </p>
+                        </td>  
                         <td>
                           <p class="conditions">Conditions: ${currentWeather.weather[0].description}</p>
                         </td>
@@ -82,10 +85,10 @@ const threeDayWeather = (currentWeather) => {
                         <p class="timestamp">${tm(forecastArray[i].dt)}</p>
                       </td>
                       <td>
-                        <p class="temp-high">High Temp: ${Math.round(forecastArray[i].temp.max)}</p>
+                        <p class="high-temp">High Temp: ${Math.round(forecastArray[i].temp.max)}</p>
                       </td>
                       <td>
-                        <p class="temp-low">Low Temp: ${Math.round(forecastArray[i].temp.min)}</p>
+                        <p class="low-temp">Low Temp: ${Math.round(forecastArray[i].temp.min)}</p>
                       </td>
                       <td>
                         <p class="conditions">Conditions: ${forecastArray[i].weather[0].description}</p>
@@ -206,9 +209,7 @@ const weatherCurrent = () => {
 
 const googleAuth = () => {
     $("#googleauth").click((e) => {
-        console.log("I'm hitting the google button");
         firebaseApi.authenticateGoogle().then((result) => {
-            console.log("result", result);
             $("#navbar").removeClass("hide");
             $("#signin").addClass("hide");
         }).catch((error) => {
@@ -230,7 +231,7 @@ const saveForecast = () => {
         };
 
         firebaseApi.saveForecast(savedForecast).then((results) => {
-            console.log(results);
+            
         }).catch((error) => {
             console.log(error);
         });
@@ -273,7 +274,22 @@ let authenticateGoogle = () => {
     });
   };
 
-  module.exports = {setKey, authenticateGoogle};
+const saveForecast = (forecast) => {
+        forecast.uid = userUid;
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            method: "POST",
+            url: `${firebaseKey.databaseURL}/forecasts.json`,
+            data: JSON.stringify(forecast)
+        }).then((result) => {
+            resolve(result);
+        }).catch((error) => {
+            reject(error);
+        });
+    });
+};
+
+  module.exports = {setKey, authenticateGoogle, saveForecast};
 },{}],5:[function(require,module,exports){
 "use strict";
 

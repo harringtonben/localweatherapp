@@ -20,4 +20,19 @@ let authenticateGoogle = () => {
     });
   };
 
-  module.exports = {setKey, authenticateGoogle};
+const saveForecast = (forecast) => {
+        forecast.uid = userUid;
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            method: "POST",
+            url: `${firebaseKey.databaseURL}/forecasts.json`,
+            data: JSON.stringify(forecast)
+        }).then((result) => {
+            resolve(result);
+        }).catch((error) => {
+            reject(error);
+        });
+    });
+};
+
+  module.exports = {setKey, authenticateGoogle, saveForecast};

@@ -54,9 +54,7 @@ const weatherCurrent = () => {
 
 const googleAuth = () => {
     $("#googleauth").click((e) => {
-        console.log("I'm hitting the google button");
         firebaseApi.authenticateGoogle().then((result) => {
-            console.log("result", result);
             $("#navbar").removeClass("hide");
             $("#signin").addClass("hide");
         }).catch((error) => {
@@ -78,7 +76,7 @@ const saveForecast = () => {
         };
 
         firebaseApi.saveForecast(savedForecast).then((results) => {
-            console.log(results);
+            
         }).catch((error) => {
             console.log(error);
         });
