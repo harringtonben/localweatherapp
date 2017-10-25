@@ -32,7 +32,10 @@
                                     <button type="submit" id="weathersubmit" class="btn btn-primary disabled">Submit</button>
                                 </div>                     
                         </div>
-                    <ul class="nav navbar-nav navbar-right">         
+                    <ul class="nav navbar-nav navbar-right">  
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                    My Forecasts
+                            </button>       
                     </ul>
                   </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
@@ -46,6 +49,20 @@
     <div id="signin" class="container">
         <button class="auth"><img id="googleauth" src="./images/googlebutton.png"></button>
     </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                  ...
+                </div>
+              </div>
+            </div>
+          </div>
 <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
 <script type="text/javascript" src="./lib/node_modules/jquery/dist/jquery.js"></script>
 <script type="text/javascript" src="./lib/node_modules/bootstrap/dist/js/bootstrap.js"></script>
