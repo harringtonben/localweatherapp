@@ -8,4 +8,3 @@ apikeys.retrieveKeys();
 events.init();
 
 
-console.log("I'm in main JS dawg");

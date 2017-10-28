@@ -80,7 +80,6 @@ const saveForecast = () => {
         }).catch((error) => {
             console.log(error);
         });
-        console.log(savedForecast);
     });
 };
 

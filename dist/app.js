@@ -235,7 +235,6 @@ const saveForecast = () => {
         }).catch((error) => {
             console.log(error);
         });
-        console.log(savedForecast);
     });
 };
 
@@ -301,7 +300,7 @@ apikeys.retrieveKeys();
 events.init();
 
 
-console.log("I'm in main JS dawg");
+
 },{"./apikeys":1,"./events":3,"./weatherapp":6}],6:[function(require,module,exports){
 "use strict";
 
