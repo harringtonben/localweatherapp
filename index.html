@@ -33,7 +33,7 @@
                                 </div>                     
                         </div>
                     <ul class="nav navbar-nav navbar-right">  
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                            <button type="button" id="saved-forecasts" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                                     My Forecasts
                             </button>       
                     </ul>
@@ -44,6 +44,8 @@
             <button type="submit" id="currentweather" class="btn btn-primary">Current Weather</button>
         <button type="submit" id="3dayweather" class="btn btn-primary">3 Day Forecast</button>
         <button type="submit" id="7dayweather" class="btn btn-primary">7 Day Forecast</button>  
+        <button type="submit" id="twittershare" class="btn btn-primary"><img class="socialimg" src="http://cdn.mysitemyway.com/etc-mysitemyway/webtreats/assets/posts/133/icons/new-twitter-bird.png"> Share to twitter</button> 
+        <button type="submit" id="facebookshare" class="btn btn-primary"><img class="socialimg" src="http://cdn.mysitemyway.com/etc-mysitemyway/icons/legacy-previews/icons/3d-transparent-glass-icons-social-media-logos/097232-3d-transparent-glass-icon-social-media-logos-facebook-logo-square.png"> Share to facebook</button>  
     </div>
     <div id="weatherOutput" class="container"></div>
     <div id="signin" class="container">
@@ -51,14 +53,14 @@
     </div>
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                  <h4 class="modal-title" id="myModalLabel"></h4>
                 </div>
-                <div class="modal-body">
-                  ...
+                <div id="savedforecasts" class="modal-body">
+                  
                 </div>
               </div>
             </div>

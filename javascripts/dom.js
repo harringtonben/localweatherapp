@@ -8,7 +8,7 @@ const tm = (unix_tm) => {
 const domStrang = (currentWeather) => {
     let printStrang = ``;
     printStrang += `<div class="weather-city">
-                        <h1>${currentWeather.name}</h1>
+                        <h1 id="city">${currentWeather.name}</h1>
                     </div>
                     <table class="table current-weather">
                       <tr class="forecast">
@@ -44,7 +44,7 @@ const domStrang = (currentWeather) => {
 const threeDayWeather = (currentWeather) => {
   let printStrang = ``;
   printStrang += `<div class="weather-city">
-                      <h1>${currentWeather.city.name}</h1>
+                      <h1 id="city">${currentWeather.city.name}</h1>
                   </div>
                   <table class="table current-weather">`;
   let forecastArray = currentWeather.list;
@@ -83,7 +83,7 @@ const threeDayWeather = (currentWeather) => {
 const sevenDayWeather = (currentWeather) => {
   let printStrang = ``;
     printStrang += `<div class="weather-city">
-                        <h1>${currentWeather.city.name}</h1>
+                        <h1 id="city">${currentWeather.city.name}</h1>
                     </div>
                     <table class="table current-weather">`;
   let forecastArray = currentWeather.list;
@@ -119,8 +119,48 @@ const sevenDayWeather = (currentWeather) => {
   printDom(printStrang);
 };
 
+const savedForecasts = (savedForecast) => {
+  let printStrang = ``;
+  for (let i = 0; i < savedForecast.length; i++) {
+    printStrang += `<tr class="my-forecasts">
+                      <td>
+                        <img src="${savedForecast[i].image_path}" alt="">
+                      </td>
+                      <td>
+                        <p>${savedForecast[i].timestamp}
+                      </td>
+                      <td>
+                        <p>${savedForecast[i].city_name}</p>
+                      </td>
+                      <td>
+                        <p>High Temp: ${savedForecast[i].high_temp}</p>
+                      </td>
+                      <td>
+                        <p>Low Temp: ${savedForecast[i].low_temp}</p>
+                      </td>
+                      <td>
+                        <p>Conditions: ${savedForecast[i].conditions}</p>
+                      </td>
+                      <td>
+                        <p>Wind Speed: ${savedForecast[i].windspeed}</p>
+                      </td>
+                      <td>
+                        <p>Air Pressure: ${savedForecast[i].airpressure}
+                      <td>
+                        <button class="btn-xs btn-default delete" data-firebase-id="${savedForecast[i].id}">X</button>
+                      </td>
+                    </tr>`;
+  }
+    printStrang += `</table>`;
+  printSaved(printStrang);
+};
+
 const printDom = (strang) => {
     $("#weatherOutput").html(strang);
 };
 
-module.exports = {domStrang, threeDayWeather, sevenDayWeather};
+const printSaved = (strang) => {
+  $("#savedforecasts").html(strang);
+};
+
+module.exports = {domStrang, threeDayWeather, sevenDayWeather, savedForecasts};

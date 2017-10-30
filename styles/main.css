@@ -27,3 +27,15 @@ body {
   text-align: center;
   padding: 10px;
   margin-top: 200px; }
+
+.my-forecasts {
+  color: #000; }
+
+.socialimg {
+  height: 20px;
+  width: 20px; }
+
+#savedforecasts {
+  font-size: 11px; }
+  #savedforecasts p {
+    padding-right: 7px; }

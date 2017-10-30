@@ -36,7 +36,7 @@ const tm = (unix_tm) => {
 const domStrang = (currentWeather) => {
     let printStrang = ``;
     printStrang += `<div class="weather-city">
-                        <h1>${currentWeather.name}</h1>
+                        <h1 id="city">${currentWeather.name}</h1>
                     </div>
                     <table class="table current-weather">
                       <tr class="forecast">
@@ -72,7 +72,7 @@ const domStrang = (currentWeather) => {
 const threeDayWeather = (currentWeather) => {
   let printStrang = ``;
   printStrang += `<div class="weather-city">
-                      <h1>${currentWeather.city.name}</h1>
+                      <h1 id="city">${currentWeather.city.name}</h1>
                   </div>
                   <table class="table current-weather">`;
   let forecastArray = currentWeather.list;
@@ -111,7 +111,7 @@ const threeDayWeather = (currentWeather) => {
 const sevenDayWeather = (currentWeather) => {
   let printStrang = ``;
     printStrang += `<div class="weather-city">
-                        <h1>${currentWeather.city.name}</h1>
+                        <h1 id="city">${currentWeather.city.name}</h1>
                     </div>
                     <table class="table current-weather">`;
   let forecastArray = currentWeather.list;
@@ -147,16 +147,57 @@ const sevenDayWeather = (currentWeather) => {
   printDom(printStrang);
 };
 
+const savedForecasts = (savedForecast) => {
+  let printStrang = ``;
+  for (let i = 0; i < savedForecast.length; i++) {
+    printStrang += `<tr class="my-forecasts">
+                      <td>
+                        <img src="${savedForecast[i].image_path}" alt="">
+                      </td>
+                      <td>
+                        <p>${savedForecast[i].timestamp}
+                      </td>
+                      <td>
+                        <p>${savedForecast[i].city_name}</p>
+                      </td>
+                      <td>
+                        <p>High Temp: ${savedForecast[i].high_temp}</p>
+                      </td>
+                      <td>
+                        <p>Low Temp: ${savedForecast[i].low_temp}</p>
+                      </td>
+                      <td>
+                        <p>Conditions: ${savedForecast[i].conditions}</p>
+                      </td>
+                      <td>
+                        <p>Wind Speed: ${savedForecast[i].windspeed}</p>
+                      </td>
+                      <td>
+                        <p>Air Pressure: ${savedForecast[i].airpressure}
+                      <td>
+                        <button class="btn-xs btn-default delete" data-firebase-id="${savedForecast[i].id}">X</button>
+                      </td>
+                    </tr>`;
+  }
+    printStrang += `</table>`;
+  printSaved(printStrang);
+};
+
 const printDom = (strang) => {
     $("#weatherOutput").html(strang);
 };
 
-module.exports = {domStrang, threeDayWeather, sevenDayWeather};
+const printSaved = (strang) => {
+  $("#savedforecasts").html(strang);
+};
+
+module.exports = {domStrang, threeDayWeather, sevenDayWeather, savedForecasts};
 },{}],3:[function(require,module,exports){
 "use strict";
 
 const weather = require("./weatherapp");
 const firebaseApi = require("./firebaseApi");
+const dom = require("./dom");
 let query;
 
 const zipValidator = () => {
@@ -227,7 +268,10 @@ const saveForecast = () => {
             "high_temp": $(parent).find(".high-temp").html().split(": ").pop(),
             "low_temp": $(parent).find(".low-temp").html().split(": ").pop(),
             "conditions": $(parent).find(".conditions").html().split(": ").pop(),
-            "windspeed": $(parent).find(".airpressure").html().split(": ").pop()
+            "airpressure": $(parent).find(".airpressure").html().split(": ").pop(),
+            "windspeed": $(parent).find(".windspeed").html().split(": ").pop(),
+            "city_name": $("#city").html(),
+            "timestamp": $(parent).find(".timestamp").html()
         };
 
         firebaseApi.saveForecast(savedForecast).then((results) => {
@@ -238,6 +282,33 @@ const saveForecast = () => {
     });
 };
 
+const getSavedForecasts = () => {
+    $("#saved-forecasts").click(() => {
+       myForecasts(); 
+    });
+};
+
+const myForecasts = () => {
+    firebaseApi.getMyForecasts().then((results) => {
+        // console.log(results);
+        dom.savedForecasts(results);
+    }).catch((error) => {
+        console.log(error);
+    });
+};
+
+const deleteForecast = () => {
+    $("body").on("click", ".delete", (e) => {
+        let forecastId = $(e.target).data("firebase-id");
+        firebaseApi.deleteSavedForecast(forecastId).then((results) => {
+        myForecasts();
+        }).catch((error) => {
+            console.log("error in deleteForecast", error);
+        });
+    });
+};
+
+
 const init = () => {
     zipValidator();
     weatherClick();
@@ -247,10 +318,12 @@ const init = () => {
     weatherCurrent();
     googleAuth();
     saveForecast();
+    getSavedForecasts();
+    deleteForecast();
 };
 
 module.exports = {init};
-},{"./firebaseApi":4,"./weatherapp":6}],4:[function(require,module,exports){
+},{"./dom":2,"./firebaseApi":4,"./weatherapp":6}],4:[function(require,module,exports){
 "use strict";
 
 let firebaseKey = "";
@@ -288,7 +361,38 @@ const saveForecast = (forecast) => {
     });
 };
 
-  module.exports = {setKey, authenticateGoogle, saveForecast};
+const getMyForecasts = () => {
+    let myForecasts = [];
+    return new Promise((resolve, reject) => {
+        $.ajax(`${firebaseKey.databaseURL}/forecasts.json`).then((forecasts) => {
+            if (forecasts != null) {
+                Object.keys(forecasts).forEach((key) => {
+                    forecasts[key].id = key;
+                    myForecasts.push(forecasts[key]);
+                });
+            }
+            resolve(myForecasts);
+        }).catch((error) => {
+            reject(error);
+        });
+    });
+};
+
+const deleteSavedForecast = (forecastId) => {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            method: "DELETE",
+            url: `${firebaseKey.databaseURL}/forecasts/${forecastId}.json`
+        }).then((data) => {
+            resolve(data);
+        }).catch((error) => {
+            reject(error);
+        });
+    });
+};
+
+
+  module.exports = {setKey, authenticateGoogle, saveForecast, getMyForecasts, deleteSavedForecast};
 },{}],5:[function(require,module,exports){
 "use strict";
 

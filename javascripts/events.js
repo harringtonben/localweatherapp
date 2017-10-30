@@ -2,6 +2,7 @@
 
 const weather = require("./weatherapp");
 const firebaseApi = require("./firebaseApi");
+const dom = require("./dom");
 let query;
 
 const zipValidator = () => {
@@ -72,7 +73,10 @@ const saveForecast = () => {
             "high_temp": $(parent).find(".high-temp").html().split(": ").pop(),
             "low_temp": $(parent).find(".low-temp").html().split(": ").pop(),
             "conditions": $(parent).find(".conditions").html().split(": ").pop(),
-            "windspeed": $(parent).find(".airpressure").html().split(": ").pop()
+            "airpressure": $(parent).find(".airpressure").html().split(": ").pop(),
+            "windspeed": $(parent).find(".windspeed").html().split(": ").pop(),
+            "city_name": $("#city").html(),
+            "timestamp": $(parent).find(".timestamp").html()
         };
 
         firebaseApi.saveForecast(savedForecast).then((results) => {
@@ -83,6 +87,33 @@ const saveForecast = () => {
     });
 };
 
+const getSavedForecasts = () => {
+    $("#saved-forecasts").click(() => {
+       myForecasts(); 
+    });
+};
+
+const myForecasts = () => {
+    firebaseApi.getMyForecasts().then((results) => {
+        // console.log(results);
+        dom.savedForecasts(results);
+    }).catch((error) => {
+        console.log(error);
+    });
+};
+
+const deleteForecast = () => {
+    $("body").on("click", ".delete", (e) => {
+        let forecastId = $(e.target).data("firebase-id");
+        firebaseApi.deleteSavedForecast(forecastId).then((results) => {
+        myForecasts();
+        }).catch((error) => {
+            console.log("error in deleteForecast", error);
+        });
+    });
+};
+
+
 const init = () => {
     zipValidator();
     weatherClick();
@@ -92,6 +123,8 @@ const init = () => {
     weatherCurrent();
     googleAuth();
     saveForecast();
+    getSavedForecasts();
+    deleteForecast();
 };
 
 module.exports = {init};

@@ -35,4 +35,35 @@ const saveForecast = (forecast) => {
     });
 };
 
-  module.exports = {setKey, authenticateGoogle, saveForecast};
+const getMyForecasts = () => {
+    let myForecasts = [];
+    return new Promise((resolve, reject) => {
+        $.ajax(`${firebaseKey.databaseURL}/forecasts.json`).then((forecasts) => {
+            if (forecasts != null) {
+                Object.keys(forecasts).forEach((key) => {
+                    forecasts[key].id = key;
+                    myForecasts.push(forecasts[key]);
+                });
+            }
+            resolve(myForecasts);
+        }).catch((error) => {
+            reject(error);
+        });
+    });
+};
+
+const deleteSavedForecast = (forecastId) => {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            method: "DELETE",
+            url: `${firebaseKey.databaseURL}/forecasts/${forecastId}.json`
+        }).then((data) => {
+            resolve(data);
+        }).catch((error) => {
+            reject(error);
+        });
+    });
+};
+
+
+  module.exports = {setKey, authenticateGoogle, saveForecast, getMyForecasts, deleteSavedForecast};
