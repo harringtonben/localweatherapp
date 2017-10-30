@@ -175,7 +175,7 @@ const savedForecasts = (savedForecast) => {
                       <td>
                         <p>Air Pressure: ${savedForecast[i].airpressure}
                       <td>
-                        <button class="btn-xs btn-default delete" data-firebase-id="${savedForecast[i].id}">X</button>
+                        <button class="btn-xs btn-primary delete" data-firebase-id="${savedForecast[i].id}">X</button>
                       </td>
                     </tr>`;
   }
