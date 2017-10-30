@@ -38,3 +38,20 @@ body {
     padding: 10px;
     margin-top: 200px;
 }
+
+.my-forecasts {
+    color: $main-dark-color;
+}
+
+.socialimg {
+    height: 20px;
+    width: 20px;
+}
+
+#savedforecasts {
+    font-size: 11px;
+    
+        p {
+            padding-right: 7px;
+        }
+}
