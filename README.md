@@ -15,8 +15,8 @@
 
 ### How to run(Node must be installed on your machine)
 ```
-git clone git@github.com:harringtonben/wysiwyg.git
-cd wysiwyg
+git clone git@github.com:harringtonben/localweatherapp.git
+cd localweatherapp
 npm install http-server -g
 cd lib/
   npm install
